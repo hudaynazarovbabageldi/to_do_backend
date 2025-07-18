@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/babageldih4/to-do-list-backend.git"
+    "url": "git+https://github.com/hudaynazarovbabageldi/to_do_backend.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/babageldih4/to-do-list-backend.git"
+    "url": "https://github.com/hudaynazarovbabageldi/to_do_backend.git"
   },
-  "homepage": "https://github.com/babageldih4/to-do-list-backend.git#readme",
+  "homepage": "https://github.com/hudaynazarovbabageldi/to_do_backend.git#readme",
   "dependencies": {
     "axios": "^1.7.3",
     "bcryptjs": "^2.4.3",
