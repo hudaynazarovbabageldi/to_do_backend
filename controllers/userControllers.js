@@ -13,7 +13,6 @@ exportObject.register = async (req, res, next) => {
   }
 
   try {
-    // Check for existing username or email
     const userCheckQuery = `SELECT * FROM users WHERE username = $1 OR email = $2`;
     const userCheckResult = await pool.query(userCheckQuery, [username, email]);
 
@@ -28,7 +27,8 @@ exportObject.register = async (req, res, next) => {
       return res.status(409).json({ status: 'conflict', conflictProperties });
     }
 
-    // Hash the password and create the user
+    console.log('CLIENT_JWT_KEY:', process.env.CLIENT_JWT_KEY);
+
     const hashPassword = await bcrypt.hash(password, 10);
     const insertUserQuery = `
       INSERT INTO users (username, email, password)
@@ -37,7 +37,8 @@ exportObject.register = async (req, res, next) => {
     const insertUserResult = await pool.query(insertUserQuery, [username, email, hashPassword]);
     const userId = insertUserResult.rows[0].id;
 
-    // Generate a JWT token
+    console.log('insertResult: ', insertUserResult);
+
     const payload = { id: userId };
     const token = jwt.sign(payload, process.env.CLIENT_JWT_KEY, { expiresIn: '3d' });
 
@@ -72,6 +73,7 @@ exportObject.login = async (req, res, next) => {
       return res.status(404).json({ status: 'fail', message: 'Wrong password' });
     }
 
+    console.log('user: ', user);
     const payload = { id: user.id };
     const token = jwt.sign(payload, process.env.CLIENT_JWT_KEY, { expiresIn: '3d' });
 
@@ -104,7 +106,7 @@ module.exports = exportObject;
 /*
 
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzI3MzYxMzg5LCJleHAiOjE3Mjc2MjA1ODl9.d_iFjxXRtbGPBpvdgkgIbSfVR1aj66odtrmJ_TTHtVg"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzUyODk1MjM5LCJleHAiOjE3NTMxNTQ0Mzl9.duh9ntBSaYl8FNbk9wJf7Ys599dx_MQcJcuSQXg86SA"
 }
 
 */
